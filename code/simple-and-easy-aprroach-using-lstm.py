@@ -34,7 +34,6 @@ import numpy as np
 import pandas as pd
 import os
 
-
 # loading data
 os.listdir("../input")
 sales_data = pd.read_csv("../input/sales_train.csv")
@@ -90,11 +89,11 @@ sales_data["date"] = pd.to_datetime(sales_data["date"], format="%d.%m.%Y")
 # That why we made shop_id and item_id our indices and date_block_num our column
 # the value we want is item_cnt_day and used sum as aggregating function
 dataset = sales_data.pivot_table(
-    index=["shop_id", "item_id"],
-    values=["item_cnt_day"],
-    columns=["date_block_num"],
-    fill_value=0,
-    aggfunc="sum",
+    index=["shop_id", "item_id"],  # 행 위치에 들어갈 열
+    values=["item_cnt_day"],  # 데이터로 사용할 열
+    columns=["date_block_num"],  # 열 위치에 들어갈 열
+    fill_value=0,  # nan 값 채우기
+    aggfunc="sum",  # 데이터 집계 함수
 )
 
 # lets reset our indices, so that data should be in way we can easily manipulate
@@ -112,7 +111,6 @@ dataset = pd.merge(test_data, dataset, on=["item_id", "shop_id"], how="left")
 dataset.fillna(0, inplace=True)
 # lets check our data now
 dataset.head()
-
 
 # we will drop shop_id and item_id because we do not need them
 # we are teaching our model how to generate the next sequence
